@@ -1,0 +1,29 @@
+group 'com.madlab'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.1.0'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-lambda', version: '1.11.70'
+    compile group: 'com.amazon.alexa', name: 'alexa-skills-kit', version: '1.2'
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.10'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.8.3'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Alexa Family Video Skill',
+                'Implementation-Version': '1.0-SNAPSHOT'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
